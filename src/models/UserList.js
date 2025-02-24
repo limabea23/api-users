@@ -3,8 +3,8 @@ class UserList {
         this.users = [];
     }
 
-    addUser(User) {
-        this.users.push(User);
+    addUser(user) {
+        this.users.push(user);
     }
 
     getAllUsers() {
