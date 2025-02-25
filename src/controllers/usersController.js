@@ -52,8 +52,8 @@ const router = {
 
     deleteUser: (req, res) => {
         try {
-            lista.status(req.params.id);
-            lista.status(200).json({message: "usuário deletado com sucesso", IdDeletado: req.params.id});
+            lista.deleteUser(req.params.id);
+            res.status(200).json({message: "usuário deletado com sucesso", IdDeletado: req.params.id});
         } catch (error) {
             res.status(404).json({message: "Erro ao deletar usuário :(", error});
         }
