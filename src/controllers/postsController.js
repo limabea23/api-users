@@ -3,10 +3,10 @@ const PostList = require("../models/PostList");
 
 const lista = new PostList();
 
-const post1 = new Post("7b253", "Love On Tour Brasil 22", "O cantor britânico, Harry Styles, fará uma turnê internacional intensa, que passará por diversas locais do globo", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.instagram.com%2Flivenationbr%2Fp%2FCY6oOZmMGSu%2F&psig=AOvVaw0DBdF7bmeeVsk-pKsf98th&ust=1740573189058000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICSrMfq3osDFQAAAAAdAAAAABAE");
+const post1 = new Post("Love On Tour Brasil 22", "O cantor britânico, Harry Styles, fará uma turnê internacional intensa, que passará por diversas locais do globo", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.instagram.com%2Flivenationbr%2Fp%2FCY6oOZmMGSu%2F&psig=AOvVaw0DBdF7bmeeVsk-pKsf98th&ust=1740573189058000&source=images&cd=vfe&opi=89978449&ved=0CBYQjRxqFwoTCICSrMfq3osDFQAAAAAdAAAAABAE", "@luvic: EU TE AMOOOOOOOOOOO HARRY STYLES", 334029);
 lista.addPost(post1);
 
-lista.addUser(new User("0009j33", "2025","Este foi o ano mais lindo da minha vida! Feliz ano novo, humanos lindos!", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSKkSrQGiudlpG-qmweDZlRGth628NO6oQTgEjbVBoQX3PV9fFO"));
+lista.addPost(new Post("2025","Este foi o ano mais lindo da minha vida! Feliz ano novo, humanos lindos!", "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSKkSrQGiudlpG-qmweDZlRGth628NO6oQTgEjbVBoQX3PV9fFO", "@manngi: tenho muito orgulho de você 😭", 446573));
 
 const router = {
     getAllPosts: (req, res) => {
@@ -21,7 +21,7 @@ const router = {
     getPostById: (req, res) => {
         try {
             const post = lista.getPostById(req.params.id);
-            res.status(200).json(user);
+            res.status(200).json(post);
         } catch (error) {
             res.status(404).json({message: "post não encontrado :(", error});
         }
@@ -29,12 +29,12 @@ const router = {
 
     addPost: (req, res) => {
         try {
-            const { id, title, description, url } = req.body;
-            if (!id || !title || !description || !url) {
+            const { title, description, url, comments, likes } = req.body;
+            if (!title || !description || !url || !comments || !likes) {
                 throw new Error("preencha todos os campos!!!");
             }
-            const newPost = new Post(id, title, description, url);
-            lista.newPost(newPost);
+            const newPost = new Post(title, description, url);
+            lista.addPost(newPost);
             res.status(200).json({message: "post criado com sucesso :)"})
         } catch (error) {
             res.status(400).json({message: "erro ao adicionar post :(", error}); 
