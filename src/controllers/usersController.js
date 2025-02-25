@@ -3,8 +3,8 @@ const UserList = require("../models/UserList");
 
 const lista = new UserList();
 
-const user1 = new User("Harry Styles", "harry.styles@gmail.com", 31)
-lista.addUser(new user1);
+const user1 = new User("Harry Styles", "harry.styles@gmail.com", 31);
+lista.addUser(user1);
 
 lista.addUser(new User("Shawn Mendes", "shawn.mendes@gmail.com", 26));
 
@@ -52,8 +52,8 @@ const router = {
 
     deleteUser: (req, res) => {
         try {
-            lista.deleteUser(req.params.id);
-            lista.deleteUser(200).json({message: "usuário deletado com sucesso", IdDeletado: req.params.id});
+            lista.status(req.params.id);
+            lista.status(200).json({message: "usuário deletado com sucesso", IdDeletado: req.params.id});
         } catch (error) {
             res.status(404).json({message: "Erro ao deletar usuário :(", error});
         }
