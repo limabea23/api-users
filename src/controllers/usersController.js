@@ -1,63 +1,60 @@
-const User = require("../models/User");
-const UserList = require("../models/UserList");
+const userModel = require("../models/userModel");
 
-const lista = new UserList();
-
-const user1 = new User("Harry Styles", "harry.styles@gmail.com", 31);
-lista.addUser(user1);
-
-lista.addUser(new User("Shawn Mendes", "shawn.mendes@gmail.com", 26));
-
-const router = {
-    getAllUsers: (req, res) => {
-        try {
-            const users = lista.getAllUsers();
-            res.status(200).json(users);
-        } catch (error) {
-            res.status(404).json({message: "Erro ao buscar usuário :(", error});
-        }
-    },
-
-    getUserById: (req, res) => {
-        try {
-            const user = lista.getUserById(req.params.id);
-            res.status(200).json(user);
-        } catch (error) {
-            res.status(404).json({message: "usuários não encontrado :(", error});
-        }
-    },
-
-    addUser: (req, res) => {
-        try {
-            const { name, email, age} = req.body;
-            if (!name || !email || age === undefined) {
-                throw new Error("preencha todos os campos!!!");
-            }
-            const newUser = new User(name, email, age);
-            lista.addUser(newUser);
-            res.status(200).json({message: "usuário criado com sucesso :)"})
-        } catch (error) {
-            res.status(400).json({message: "erro ao adicionar usuário :(", error});
-        }
-    },
-
-    updateUser: (req, res) => {
-        try {
-            const updatedUser = lista.updateUser(req.params.id, req.body);
-            res.status(200).json(updatedUser);
-        } catch (error) {
-            res.status(404).json({message: "erro ao atualizar usuário :(", error});
-        }
-    },
-
-    deleteUser: (req, res) => {
-        try {
-            lista.deleteUser(req.params.id);
-            res.status(200).json({message: "usuário deletado com sucesso", IdDeletado: req.params.id});
-        } catch (error) {
-            res.status(404).json({message: "Erro ao deletar usuário :(", error});
-        }
-    },
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userModel.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao buscar usuários." });
+    }
 };
 
-module.exports = router;
+const getUser = async (req, res) => {
+    try {
+        const user = await userModel.getUserById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: "Casa não encontrada." });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao buscar casa." });
+    }
+};
+
+const createUser = async (req, res) => {
+    try {
+        const { name, founder } = req.body;
+        const newUser = await userModel.createUser(name, founder);
+        res.status(201).json(newUser);
+    } catch (error) {
+	console.log(error);
+        if (error.code === "23505") { // Código de erro do PostgreSQL para chave única violada
+            return res.status(400).json({ message: "Usuário já cadastrado." });
+        }
+        res.status(500).json({ message: "Erro ao criar usuário." });
+    }
+};
+
+const updateUser = async (req, res) => {
+    try {
+        const { name, founder } = req.body;
+        const updatedUser = await userModel.updateUser(req.params.id, name, founder);
+        if (!updatedUser) {
+            return res.status(404).json({ message: "Usuário não encontrado." });
+        }
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao atualizar usuário." });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    try {
+        const message = await userModel.deleteUser(req.params.id);
+        res.json(message);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao usuário casa." });
+    }
+};
+
+module.exports = { getAllUsers, getUser, createUser, updateUser, deleteUser };
