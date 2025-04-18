@@ -13,18 +13,18 @@ const getUserById = async (id) => {
     return result.rows[0];
 };
 
-const createUser = async (name, username, email) => {
+const createUser = async (name, username, email, photo) => {
     const result = await pool.query(
-        "INSERT INTO users (name, username, email) VALUES ($1, $2, $3) RETURNING *",
-        [name, username, email]
+        "INSERT INTO users (name, username, email, photo) VALUES ($1, $2, $3, $4) RETURNING *",
+        [name, username, email, photo]
     );
     return result.rows[0];
 };
 
-const updateUser = async (id, name, username, email) => {
+const updateUser = async (id, name, username, email, photo) => {
     const result = await pool.query(
-        "UPDATE users SET name = $1, username = $2, email = $3 WHERE id = $4 RETURNING *",
-        [name, username, email, id]
+        "UPDATE users SET name = $1, username = $2, email = $3, photo = $4 WHERE id = $4 RETURNING *",
+        [name, username, email, photo, id]
     );
     return result.rows[0];
 };
