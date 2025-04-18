@@ -13,18 +13,18 @@ const getUser = async (req, res) => {
     try {
         const user = await userModel.getUserById(req.params.id);
         if (!user) {
-            return res.status(404).json({ message: "Casa não encontrada." });
+            return res.status(404).json({ message: "Usuário não encontrado." });
         }
         res.json(user);
     } catch (error) {
-        res.status(500).json({ message: "Erro ao buscar casa." });
+        res.status(500).json({ message: "Erro ao buscar usuário." });
     }
 };
 
 const createUser = async (req, res) => {
     try {
-        const { name, founder } = req.body;
-        const newUser = await userModel.createUser(name, founder);
+        const { name, username, email } = req.body;
+        const newUser = await userModel.createUser(name, username, email);
         res.status(201).json(newUser);
     } catch (error) {
 	console.log(error);
@@ -37,8 +37,8 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { name, founder } = req.body;
-        const updatedUser = await userModel.updateUser(req.params.id, name, founder);
+        const { name, username, email } = req.body;
+        const updatedUser = await userModel.updateUser(req.params.id, name, username, email);
         if (!updatedUser) {
             return res.status(404).json({ message: "Usuário não encontrado." });
         }
