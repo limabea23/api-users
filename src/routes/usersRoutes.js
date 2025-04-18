@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const usersController = require("../controllers/usersController");
+const upload = require("../config/upload.js");
 
 /**
  * @swagger
@@ -71,7 +72,7 @@ router.get("/users/:id", usersController.getUser);
  *       201:
  *         description: Usuário criado
  */
-router.post("/users", usersController.createUser);
+router.post("/users", upload.single("photo"), usersController.createUser);
 
 /**
  * @swagger
