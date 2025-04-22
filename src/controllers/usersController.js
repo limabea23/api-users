@@ -35,8 +35,8 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { name, username, email } = req.body;
-        const updatedUser = await userModel.updateUser(req.params.id, name, username, email);
+        const { name, username, email, photo } = req.body;
+        const updatedUser = await userModel.updateUser(req.params.id, name, username, email, photo);
         if (!updatedUser) {
             return res.status(404).json({ message: "Usuário não encontrado." });
         }
@@ -51,7 +51,7 @@ const deleteUser = async (req, res) => {
         const message = await userModel.deleteUser(req.params.id);
         res.json(message);
     } catch (error) {
-        res.status(500).json({ message: "Erro ao usuário casa." });
+        res.status(500).json({ message: "Erro ao deletar usuário." });
     }
 };
 

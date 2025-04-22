@@ -5,7 +5,7 @@ const getAllPosts = async (req, res) => {
         const posts = await postModel.getAllPosts();
         res.json(posts);
     } catch (error) {
-        res.status(500).json({ message: "Erro ao buscar post." });
+        res.status(500).json({ message: "Erro ao buscar posts." });
     }
 };
 
